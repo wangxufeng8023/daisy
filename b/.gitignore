@@ -1,0 +1,10 @@
+.DS_Store
+public/archive/*.docx
+public/archive/*.pdf
+public/backup/
+public/static/
+public/index.html
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

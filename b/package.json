@@ -1,0 +1,35 @@
+{
+  "name": "daisy",
+  "version": "1.0.0",
+  "description": "学校内务检查管理系统（后端）。",
+  "author": "Angela-1 <ruoshui_engr@163.com>",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "cookie-parser": "^1.4.3",
+    "debug": "^3.1.0",
+    "jszip": "<3.0.0",
+    "docxtemplater": "^3.1.9",
+    "express": "^4.16.2",
+    "iconv-lite": "^0.4.19",
+    "ignore": "^3.3.5",
+    "inherits": "^2.0.3",
+    "moment": "^2.19.1",
+    "mongodb": "^2.2.33",
+    "morgan": "^1.9.0",
+    "serve-favicon": "^2.4.5",
+    "string_decoder": "^1.0.3"
+  },
+  "devDependencies": {
+    "babel-eslint": "^8.0.0",
+    "eslint": "^4.7.1",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-node": "^5.1.1",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-standard": "^3.0.1"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "name": "Daisy（雏菊）学校内务检查管理系统",
+  "short_name": "Daisy（雏菊）",
+  "icons": [
+    {
+      "src": "/static/img/icons/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/static/img/icons/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#cdc8eb",
+  "background_color": "#cdc8eb",
+  "display": "standalone"  
+}

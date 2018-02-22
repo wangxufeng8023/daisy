@@ -1,0 +1,83 @@
+// 
+// 个人定义的样式文件。
+// 
+
+.hline {
+  background-color: #cdc8eb;
+  height: 4px;
+}
+
+.page {
+  margin: 20px;
+  .page-title {
+    margin: 10px 0;
+  }
+  .page-info {
+    margin: 5px 0;
+  }
+  .section {
+    margin: 10px 0;
+    padding-top: 5px;
+    padding-bottom: 10px;
+  }
+  .section-title {
+    margin: 5px 0;
+  }
+  .subsection {
+    margin: 5px 0;
+  }
+}
+
+.spin {
+  position: absolute;
+  left: 50%;
+  .spin-item {
+    margin-right: 20px;
+  }
+}
+
+
+
+
+.toolbar {
+  margin: 10px 0 20px 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  .toolbar-item {
+    margin-right: 10px;
+  }
+}
+
+
+.loading-modal {
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.circle-loading {
+  animation: circle-loading-ani 1s linear infinite;
+}
+
+
+@keyframes circle-loading-ani {
+  from {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+
+@media only screen and (max-width: 767px) {
+  .page {
+    margin: 5px;
+    padding-bottom: 10px;
+  }
+}
