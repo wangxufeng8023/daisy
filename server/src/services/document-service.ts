@@ -19,6 +19,11 @@ import { DaisyConfig } from "../types/daisy"
 let config: DaisyConfig = require('../config/daisyconfig.json')
 
 
+import { TemplateFactory } from '../domains/templater-factory'
+import { ReportTemplate } from "../domains/report-template";
+
+
+
 class DocumentService extends BaseService {
   constructor(repository: DocumentRepository) {
     super(repository)
@@ -247,8 +252,10 @@ class DocumentService extends BaseService {
       default:
         break
     }
-    let docx = new DocxTemplate(type, data)
-    const reportFilePath = await docx.generate()
+    let rt = TemplateFactory.createTemplate('report', 'pdf', data)
+    let reportFilePath: string = await rt.generate()    
+    // let docx = new DocxTemplate(type, data)
+    // const reportFilePath = await docx.generate()
     return reportFilePath
   }
 

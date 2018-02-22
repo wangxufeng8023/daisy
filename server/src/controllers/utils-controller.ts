@@ -25,7 +25,7 @@ class UtilsController {
   static async resetDb(ctx: Koa.Context, next: Function) {
     const InitDbCollection = {
       CLASSES: 'classes',
-      DAILY: 'daily',
+      DAILY: 'dailies'
     }
     const daisyconfig: DaisyConfig = await Utils.parseSetting2()
 
@@ -43,7 +43,7 @@ class UtilsController {
           break
         default:
           ctx.body = {
-            data: "无操作"
+            data: '无操作'
           }
           break
       }
@@ -70,8 +70,7 @@ class UtilsController {
 
   static async setConfig(ctx: Koa.Context, next: Function) {
     let config = ctx.request.body
-    config.daterange.from = moment(config.daterange.from).format(
-      'YYYY-MM-DD')
+    config.daterange.from = moment(config.daterange.from).format('YYYY-MM-DD')
     config.daterange.to = moment(config.daterange.to).format('YYYY-MM-DD')
     await Utils.saveSettingAwait(config)
     ctx.status = 200
@@ -79,11 +78,9 @@ class UtilsController {
 
   static async backupDb(ctx: Koa.Context, next: Function) {
     Utils.backupData('classes')
-    Utils.backupData('daily')
+    Utils.backupData('dailies')
     ctx.status = 200
   }
-
-
 }
 
 export { UtilsController }
