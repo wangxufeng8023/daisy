@@ -4,25 +4,20 @@
  * @file 导出文档服务
  * @author Angela-1 <ruoshui_engr@163.com>
  * 本文件是雏菊-学校内务检查管理系统的一部分。
- * 
+ *
  * © 2017-2018 Angela 版权所有。开源仅用于学术交流分享，商业使用请联系作者。
  */
 
-import * as Koa from "koa"
-import { BaseService } from "./base-service"
-import { DocumentRepository } from "../repositories/document-repository"
-import { DocxTemplate } from "../domains/docx-template"
-import { PdfTemplate } from "../domains/pdf-template"
+import * as Koa from 'koa'
+import { BaseService } from './base-service'
+import { DocumentRepository } from '../repositories/document-repository'
 
-import { DaisyConfig } from "../types/daisy"
+import { DaisyConfig } from '../types/daisy'
 
 let config: DaisyConfig = require('../config/daisyconfig.json')
 
-
 import { TemplateFactory } from '../domains/templater-factory'
-import { ReportTemplate } from "../domains/report-template";
-
-
+import { ReportTemplate } from '../domains/report-template'
 
 class DocumentService extends BaseService {
   constructor(repository: DocumentRepository) {
@@ -30,28 +25,30 @@ class DocumentService extends BaseService {
   }
 
   _assembleCondition(where: any) {
-    let queryList: any[] = [{
-      date: {
-        $gte: new Date(config.daterange.from),
-        $lte: new Date(config.daterange.to),
+    let queryList: any[] = [
+      {
+        date: {
+          $gte: new Date(config.daterange.from),
+          $lte: new Date(config.daterange.to)
+        }
       }
-    }]
+    ]
     for (let k in where) {
       if (k === 'format' || k === 'type') {
         continue
       }
       queryList.push({
-        [k]: where[k],
+        [k]: where[k]
       })
     }
     let condition = {
-      $and: queryList,
+      $and: queryList
     }
     return condition
   }
 
   /**
-   * 
+   *
    * @param where 去除周参数的 condition
    */
   _assembleCondition2(where: any) {
@@ -61,18 +58,18 @@ class DocumentService extends BaseService {
         continue
       }
       queryList.push({
-        [k]: where[k],
+        [k]: where[k]
       })
     }
     let condition = {
-      $and: queryList,
+      $and: queryList
     }
     return condition
   }
 
   /**
- * 根据班级排序。
- */
+   * 根据班级排序。
+   */
   static _sortClass(a: any, b: any) {
     return parseInt(a.class) - parseInt(b.class)
   }
@@ -99,7 +96,7 @@ class DocumentService extends BaseService {
             class: indexClass,
             teacher: teacher,
             male: male,
-            female: female,
+            female: female
           })
           male = []
           female = []
@@ -114,12 +111,12 @@ class DocumentService extends BaseService {
         }
         teacher = one.teacher
         // 最后一项，把之前一项存储。
-        if (parseInt(r) === (rooms.length - 1)) {
+        if (parseInt(r) === rooms.length - 1) {
           roomsList.push({
             class: indexClass,
             teacher: teacher,
             male: male,
-            female: female,
+            female: female
           })
           male = []
           female = []
@@ -129,8 +126,6 @@ class DocumentService extends BaseService {
     })
   }
 
-
-
   async _prepareReportData(where: any) {
     const condition = this._assembleCondition(where)
     let data1 = await this.repository.getDailyData(condition)
@@ -139,7 +134,7 @@ class DocumentService extends BaseService {
       grade: where.grade,
       week: where.week,
       sex: where.sex,
-      row: this._reduceData(data2),
+      row: this._reduceData(data2)
     }
     return data3
   }
@@ -158,16 +153,18 @@ class DocumentService extends BaseService {
       return c.sex === '女生'
     })
     let maleProblems: any = await DocumentService._assembleNoticeOfCriticism(
-      maleProblemRooms)
+      maleProblemRooms
+    )
     let femaleProblems: any = await DocumentService._assembleNoticeOfCriticism(
-      femaleProblemRooms)
+      femaleProblemRooms
+    )
     let data = {
       grade: where.grade,
       week: where.week,
       maleproblems: maleProblems,
       femaleproblems: femaleProblems,
       malenil: maleProblems.length === 0 ? '无。' : '',
-      femalenil: femaleProblems.length === 0 ? '无。' : '',
+      femalenil: femaleProblems.length === 0 ? '无。' : ''
     }
     return data
   }
@@ -191,7 +188,7 @@ class DocumentService extends BaseService {
             class: indexClass,
             teacher: teacher,
             male: male,
-            female: female,
+            female: female
           })
           male = []
           female = []
@@ -206,12 +203,12 @@ class DocumentService extends BaseService {
         }
         teacher = one.teacher
         // 最后一项，把之前一项存储。
-        if (parseInt(r) === (rooms.length - 1)) {
+        if (parseInt(r) === rooms.length - 1) {
           roomsList.push({
             class: indexClass,
             teacher: teacher,
             male: male,
-            female: female,
+            female: female
           })
           male = []
           female = []
@@ -223,11 +220,11 @@ class DocumentService extends BaseService {
   async _prepareClassData(where: any) {
     let condition = this._assembleCondition(where)
     let problemRooms = await this.repository.getProblemRooms(condition)
-    
+
     let condition2 = this._assembleCondition2(where)
     let allRooms = await this.repository.getAllRooms(condition2)
     let goodRooms = await this.repository.getGoodRooms(allRooms, problemRooms)
-   
+
     goodRooms.sort(DocumentService._sortClass)
     let sg = await this._assembleRooms(goodRooms)
     let data = {
@@ -236,8 +233,9 @@ class DocumentService extends BaseService {
     }
     return data
   }
-  async exportToDocx(ctx: Koa.Context) {
-    const { type } = ctx.query
+
+  async export(ctx: Koa.Context) {
+    const { type, format } = ctx.query
     let data: any
     switch (type) {
       case 'report':
@@ -252,56 +250,32 @@ class DocumentService extends BaseService {
       default:
         break
     }
-    let rt = TemplateFactory.createTemplate('report', 'pdf', data)
-    let reportFilePath: string = await rt.generate()    
-    // let docx = new DocxTemplate(type, data)
-    // const reportFilePath = await docx.generate()
-    return reportFilePath
-  }
 
-  async exportToPdf(ctx: Koa.Context) {
-    const where = ctx.query
-    const condition = this._assembleCondition(where)
-    let data1 = await this.repository.getDailyData(condition)
-    let data2 = DocumentService._assembleData(data1)
-    let data3 = {
-      grade: ctx.query.grade,
-      week: ctx.query.week,
-      sex: ctx.query.sex,
-      row: this._reduceData(data2),
-    }
-    let pdf = new PdfTemplate('report', data3)
-    const reportFilePath = await pdf.generate2()
-    return reportFilePath
+    let template = TemplateFactory.createTemplate(type, format, data)
+    let r: string = await template.generate()
+    return r
   }
-
 
   static _assembleData(result: any) {
-    const wpPre =
-      `
+    const wpPre = `
               <w:p><w:pPr>
               <w:spacing w:line="240" w:lineRule="exact"/>
               <w:jc w:val="left"/>
               </w:pPr>`
     const wpPost = '</w:p>'
-    let wrBdr =
-      '<w:bdr w:val="single" w:sz="4" w:space="0" w:color="FF0000"/>'
-    const wtDia =
-      `
+    let wrBdr = '<w:bdr w:val="single" w:sz="4" w:space="0" w:color="FF0000"/>'
+    const wtDia = `
               <w:r><w:rPr><w:color w:val="FF0000"/>
               </w:rPr>
               <w:t>♦</w:t></w:r>`
-    const wtRedPre =
-      `
+    const wtRedPre = `
               <w:r><w:rPr><w:b/>
               </w:rPr><w:t>`
-    const wtDiaBdr =
-      `
+    const wtDiaBdr = `
               <w:r><w:rPr><w:color w:val="FF0000"/>${wrBdr}
               </w:rPr>
               <w:t>♦</w:t></w:r>`
-    const wtRedPreBdr =
-      `
+    const wtRedPreBdr = `
               <w:r><w:rPr><w:b/>
               ${wrBdr}
               </w:rPr><w:t>`
@@ -309,25 +283,59 @@ class DocumentService extends BaseService {
     const spanPre = '<w:r><w:t>'
     const spanPost = '</w:t></w:r>'
     let gl: any = []
-    result.forEach(function (a: any) {
+    result.forEach(function(a: any) {
       for (let j in a.problems) {
         let d: any = {}
         if (a.problems.length === 2) {
           d.class = 'class' + a.class
-          d.desc = wpPre + wtDia + wtRedPre + a.roomnumber + spanPost +
-            spanPre + '：' + spanPost + wpPost +
-            wpPre + spanPre + a.problems[j].desc + spanPost + wpPost
+          d.desc =
+            wpPre +
+            wtDia +
+            wtRedPre +
+            a.roomnumber +
+            spanPost +
+            spanPre +
+            '：' +
+            spanPost +
+            wpPost +
+            wpPre +
+            spanPre +
+            a.problems[j].desc +
+            spanPost +
+            wpPost
         } else if (a.problems.length >= 3) {
           d.class = 'class' + a.class
-          d.desc = wpPre + wtDiaBdr + wtRedPreBdr + a.roomnumber +
-            spanPost + spanPre + '：' + spanPost + wpPost +
-            wpPre + spanPre + a.problems[j].desc + spanPost +
+          d.desc =
+            wpPre +
+            wtDiaBdr +
+            wtRedPreBdr +
+            a.roomnumber +
+            spanPost +
+            spanPre +
+            '：' +
+            spanPost +
+            wpPost +
+            wpPre +
+            spanPre +
+            a.problems[j].desc +
+            spanPost +
             wpPost
         } else {
           d.class = 'class' + a.class
-          d.desc = wpPre + wtEmPre + a.roomnumber + spanPost + spanPre +
-            '：' + spanPost + wpPost +
-            wpPre + spanPre + a.problems[j].desc + spanPost + wpPost
+          d.desc =
+            wpPre +
+            wtEmPre +
+            a.roomnumber +
+            spanPost +
+            spanPre +
+            '：' +
+            spanPost +
+            wpPost +
+            wpPre +
+            spanPre +
+            a.problems[j].desc +
+            spanPost +
+            wpPost
         }
         d['index'] = new Date(a.problems[j].date).getDay()
         gl.push(d)
@@ -342,10 +350,9 @@ class DocumentService extends BaseService {
       '2': '周二',
       '3': '周三',
       '4': '周四',
-      '5': '周五',
+      '5': '周五'
     }
-    const wpPre =
-      `
+    const wpPre = `
               <w:p><w:pPr>
               <w:spacing w:line="240" w:lineRule="exact"/>
               <w:jc w:val="left"/>
@@ -370,7 +377,7 @@ class DocumentService extends BaseService {
       class15: wpPre + wpPost,
       class16: wpPre + wpPost,
       class17: wpPre + wpPost,
-      class18: wpPre + wpPost,
+      class18: wpPre + wpPost
     }
     for (let i = 1; i < 6; i++) {
       let oneDayData = data.filter((v: any) => {
@@ -378,11 +385,15 @@ class DocumentService extends BaseService {
       })
       let row: any = {}
       if (oneDayData.length > 0) {
-        row = oneDayData.reduce((p: any, n: any) => Object.assign({}, p, {
-          index: wk[n.index],
-          [n.class]: p[n.class] === wpPre + wpPost ? n.desc : p[n.class] +
-            n.desc,
-        }), initObj)
+        row = oneDayData.reduce(
+          (p: any, n: any) =>
+            Object.assign({}, p, {
+              index: wk[n.index],
+              [n.class]:
+                p[n.class] === wpPre + wpPost ? n.desc : p[n.class] + n.desc
+            }),
+          initObj
+        )
       } else {
         initObj['index'] = wk[i]
         row = initObj
@@ -391,6 +402,5 @@ class DocumentService extends BaseService {
     }
     return newResult
   }
-
 }
 export { DocumentService }

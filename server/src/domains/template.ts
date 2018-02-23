@@ -18,7 +18,7 @@ let Docxtemplater = require('docxtemplater')
 const resourcePath = path.join(__dirname, '/../public/resource/')
 const archivePath = path.join(__dirname, '/../public/archive/')
 
-enum Format {
+const enum Format {
   DOCX = 'DOCX',
   PDF = 'PDF'
 }

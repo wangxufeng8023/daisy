@@ -8,12 +8,18 @@
  * © 2017-2018 Angela 版权所有。开源仅用于学术交流分享，商业使用请联系作者。
  */
 import { ReportTemplate } from './report-template'
+import { NoticeTemplate } from './notice-template'
+import { DormitoryTemplate } from './dormitory-template'
 
 class TemplateFactory {
   static createTemplate(name: string, format: string, data: any) {
     switch (name) {
       case 'report':
         return new ReportTemplate(format, data)
+      case 'notice':
+        return new NoticeTemplate(format, data)
+      case 'dormitory':
+        return new DormitoryTemplate(format, data)
       default:
         return new ReportTemplate(format, data)
     }
