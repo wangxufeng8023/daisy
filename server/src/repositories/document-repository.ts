@@ -20,7 +20,7 @@ import { MongoClient, ObjectId, Db, Collection, Cursor } from "mongodb"
  */
 class DocumentRepository extends BaseRepository {
 
-  constructor(collection: string) {
+  constructor(collection: string = '') {
     super(collection)
   }
 

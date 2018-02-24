@@ -22,29 +22,7 @@ import { DaisyConfig } from "../types/daisy"
  * 工具类，读取保存配置文件，备份数据库。
  */
 class Utils {
-  /**
-   * 解析配置文件。
-   */
-  // static parseSetting(): DaisyConfig {
-  //     const config: DaisyConfig = JSON.parse(
-  //         fs.readFileSync(configFile, 'utf-8'))
-  //     return config
-  // }
-  static readFileAwait(path: string): Promise<string> {
-    return new Promise((resolve: (value?: string) => void,
-      reject: (error?: any) => void) => {
-      fs.readFile(configFile, 'utf8', 
-        (err: NodeJS.ErrnoException, content: string) => {
-          if (err) {
-            reject(err)
-          } else {
-            resolve(content)
-          }
-        })
-    })
-  }
-
-  static saveSettingAwait(configObj: any) {
+  static saveSetting(configObj: any) {
     return new Promise((resolve: (value?: string) => void,
       reject: (error?: any) => void) => {
       fs.writeFile(configFile, JSON.stringify(configObj, null, 4),
@@ -57,11 +35,7 @@ class Utils {
         })
     })
   }
-  static async parseSetting2(): Promise<DaisyConfig> {
-    const content: string = await this.readFileAwait(configFile)
-    const config: DaisyConfig = JSON.parse(content)
-    return config
-  }
+
   /**
    * 备份数据库数据到文件。
    * @param collection 集合名称

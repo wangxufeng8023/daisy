@@ -13,7 +13,6 @@ import { BaseService } from "./base-service"
 
 import { MongoClient, ObjectId, Db, Collection, Cursor } from "mongodb"
 import { DaisyConfig } from "../types/daisy"
-import { DocxTemplate } from "../domains/docx-template"
 import { DailyRepository } from "../repositories/daily-repository"
 
 let config: DaisyConfig = require('../config/daisyconfig.json')
