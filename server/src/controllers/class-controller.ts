@@ -23,6 +23,8 @@ class ClassController {
    */
   static async index(ctx: Koa.Context, next: Function) {
     let r = await new ClassService('classes').find(ctx)
+    console.log(typeof r)
+    
     ctx.body = r
   }
 

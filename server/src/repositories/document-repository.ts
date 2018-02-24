@@ -27,7 +27,7 @@ class DocumentRepository extends BaseRepository {
   getAllRooms(condition: any) {
     return new Promise(async (resolve, reject) => {
       try {
-        let client: MongoClient = await MongoClient.connect(this.config.dburl)
+        let client: MongoClient = await MongoClient.connect(this.config.dburl, this.options)
         let collection: Collection = client.db(this.config.dbname).collection('classes')
         let cursor = await collection.aggregate([{
           $project: {
@@ -96,7 +96,7 @@ class DocumentRepository extends BaseRepository {
   getProblemRooms(condition: any) {
     return new Promise(async (resolve, reject) => {
       try {
-        let client: MongoClient = await MongoClient.connect(this.config.dburl)
+        let client: MongoClient = await MongoClient.connect(this.config.dburl, this.options)
         let collection: Collection = client.db(this.config.dbname).collection('dailies')
         let cursor = await collection.aggregate([{
           $project: {
@@ -164,7 +164,7 @@ class DocumentRepository extends BaseRepository {
   getDailyData(condition: any) {
     return new Promise(async (resolve, reject) => {
       try {
-        let client: MongoClient = await MongoClient.connect(this.config.dburl)
+        let client: MongoClient = await MongoClient.connect(this.config.dburl, this.options)
         let collection: Collection = client.db(this.config.dbname).collection('dailies')
         let cursor = await collection.aggregate([{
           $project: {

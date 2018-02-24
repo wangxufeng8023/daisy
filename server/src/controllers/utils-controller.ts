@@ -58,8 +58,11 @@ class UtilsController {
    */
   static async testConnection(ctx: Koa.Context, next: Function) {
     try {
-      let client: MongoClient = await MongoClient.connect(config.dburl)
+      let client: MongoClient = await MongoClient.connect(config.dburl, {
+        family: 4
+      })
       ctx.status = 200
+      client.close()
     } catch (error) {
       ctx.status = 404
     }

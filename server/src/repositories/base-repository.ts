@@ -8,6 +8,14 @@
  */
 
 import * as Koa from "koa"
+import {
+  MongoClient,
+  Db,
+  Collection,
+  Cursor,
+  MongoClientOptions
+} from 'mongodb'
+
 import { MongoData } from "../domains/mongo-data"
 
 import { DaisyConfig } from "../types/daisy"
@@ -18,10 +26,14 @@ import { DaisyConfig } from "../types/daisy"
 abstract class BaseRepository {
   collection: string
   config: DaisyConfig
+  options: MongoClientOptions
+  
 
   constructor(collection: string) {
     this.collection = collection
     this.config = require('../config/daisyconfig.json')
+     this.options = new Object()
+     this.options.family = 4
   }
 
   /**

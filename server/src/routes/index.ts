@@ -25,6 +25,9 @@ import { DaisyConfig } from "../types/daisy"
 const config: DaisyConfig = require('../config/daisyconfig.json')
 router.prefix(config.url_prefix)
 
+import { ClassService } from '../services/test-service'
+
+
 /**
  * # 工具路由
  */
@@ -77,6 +80,19 @@ router.get('/dormitories', ClassController.getDormitory)
 router.get('/documents', DocumentController.export)
 
 router.get('/downloads', DocumentController.download)
+
+
+router.get('/test', async (ctx, next) => {
+  console.log(new Date())
+  let r = await ClassService.find(ctx)
+  console.log(new Date())
+
+  ctx.body = r
+  // console.log('here')
+  // ctx.body = 'a'
+})
+
+
 
 export { router as index }
 

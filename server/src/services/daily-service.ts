@@ -68,38 +68,11 @@ class DailyService extends BaseService {
     return r
   }
 
-  /**
-   * 问题的建议模块。
-   * @param  {string} str 用户输入字符串
-   * @return {array<string>}     返回可能的字符串列表
-   */
-  suggestion() {
-    return new Promise(async (resolve, reject) => {
-      let client: MongoClient = await MongoClient.connect(dburl)
-      let collection: Collection = client.db('sanitation').collection('dailies')
-      try {
-        let cursor = await collection.aggregate([{
-          $project: {
-            desc: 1,
-          },
-        }, {
-          $group: {
-            _id: 0,
-            desc: {
-              $addToSet: '$desc',
-            },
-          },
-        }])
-        let result = await cursor.toArray()
-        resolve(result)
-      } catch (err) {
-        reject(err)
-      }
-      if (client) {
-        client.close()
-      }
-    })
+  async suggestion(){
+     let r = await this.repository.suggestion()
+     return r
   }
+  
 }
 
 

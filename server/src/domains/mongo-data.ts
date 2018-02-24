@@ -3,13 +3,19 @@
 /**
  * @author Angela-1 <ruoshui_engr@163.com>
  * 本文件是雏菊-学校内务检查管理系统的一部分。
- * 
+ *
  * © 2017-2018 Angela 版权所有。开源仅用于学术交流分享，商业使用请联系作者。
  */
 
-
-import { MongoClient, ObjectId, Db, Collection, Cursor } from "mongodb"
-import { DaisyConfig } from "../types/daisy"
+import {
+  MongoClient,
+  ObjectId,
+  Db,
+  Collection,
+  Cursor,
+  MongoClientOptions
+} from 'mongodb'
+import { DaisyConfig } from '../types/daisy'
 
 const config: DaisyConfig = require('../config/daisyconfig.json')
 const dburl: string = config.dburl
@@ -20,9 +26,12 @@ const dbname: string = config.dbname
  */
 class MongoData {
   collection: string
+  options: MongoClientOptions
 
   constructor(collection: string) {
     this.collection = collection
+    this.options = new Object()
+    this.options.family = 4
   }
   /**
    * 新增记录。
@@ -30,7 +39,7 @@ class MongoData {
   create(data: any) {
     return new Promise(async (resolve, reject) => {
       try {
-        let client = await MongoClient.connect(dburl)
+        let client: MongoClient = await MongoClient.connect(dburl, this.options)
         const db = client.db(dbname)
         let r = await db.collection(this.collection).insertOne(data)
         resolve(r.insertedId)
@@ -47,9 +56,12 @@ class MongoData {
   find(condition: any) {
     return new Promise(async (resolve, reject) => {
       try {
-        let client = await MongoClient.connect(dburl)
+        let client = await MongoClient.connect(dburl, this.options)
         const db = client.db(dbname)
-        let r = await db.collection(this.collection).find(condition).toArray()
+        let r = await db
+          .collection(this.collection)
+          .find(condition)
+          .toArray()
         resolve(r)
         client.close()
       } catch (err) {
@@ -66,12 +78,14 @@ class MongoData {
     return new Promise(async (resolve, reject) => {
       const id: ObjectId = new ObjectId(objId)
       try {
-        let client = await MongoClient.connect(dburl)
+        let client = await MongoClient.connect(dburl, this.options)
         const db = client.db(dbname)
-        let r = await db.collection(this.collection)
-          .updateOne({
-            _id: id,
-          }, { $set: obj })
+        let r = await db.collection(this.collection).updateOne(
+          {
+            _id: id
+          },
+          { $set: obj }
+        )
         resolve(r.modifiedCount)
         client.close()
       } catch (err) {
@@ -87,7 +101,7 @@ class MongoData {
     return new Promise(async (resolve, reject) => {
       const id: ObjectId = new ObjectId(objId)
       try {
-        let client = await MongoClient.connect(dburl)
+        let client = await MongoClient.connect(dburl, this.options)
         const db = client.db(dbname)
         let r = await db.collection(this.collection).deleteOne({ _id: id })
         resolve(r.deletedCount)
