@@ -26,6 +26,10 @@ const dbname: string = config.dbname
  */
 class MongoData {
   collection: string
+  /**
+   * 连接的时候必须设置 IPV4，网上搜索到这个是一个 BUG，文档可能会更新，同时默认值可能会修改为 4
+   * 设置 options 为 { family: 4 }
+   */
   options: MongoClientOptions
 
   constructor(collection: string) {
