@@ -9,6 +9,7 @@
  */
 
 import * as Koa from 'koa'
+import * as send from 'koa-send' 
 import * as path from 'path'
 
 import { DaisyConfig } from '../types/daisy'
@@ -26,11 +27,37 @@ class DocumentController {
    * @GET
    */
   static async export(ctx: Koa.Context, next: Function) {
-    const { format } = ctx.query
     let ds = await new DocumentService(new DocumentRepository())
-    let docx = await ds.export(ctx)
-    let docx_link = path.basename(docx)
-    ctx.body = { file_path: docx_link }
+    const { type } = ctx.query
+    if (type === 'all') {
+      ctx.query.type = 'report'
+      ctx.query.sex = '男生'
+      let doc1 = await ds.export(ctx)
+      ctx.query.sex = '女生'
+      let doc2 = await ds.export(ctx)
+      ctx.query.type = 'notice'
+      let doc3 = await ds.export(ctx)
+      let doc_links = [doc1, doc2, doc3].map(v => {
+        return path.basename(v)
+      })
+      console.log(doc_links)
+      ctx.body = { file_path: doc_links }
+    } else {
+      let doc = await ds.export(ctx)
+      let doc_link = path.basename(doc)
+      ctx.body = { file_path: doc_link }
+    }
+  }
+  /**
+   * 下载文件
+   */
+  static async download(ctx: Koa.Context, next: Function) {
+    let fileName = ctx.query.file
+    let filePath = path.join('dist/public/archive/', fileName)
+    ctx.set('Content-Type', 'application/octet-stream')
+    ctx.set('Content-Disposition', 'attachment;filename='+ encodeURI(fileName))
+    
+    await send(ctx, filePath)
   }
 }
 

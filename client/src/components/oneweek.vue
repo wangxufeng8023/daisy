@@ -286,16 +286,16 @@ export default {
         })
     },
     exportAll(format) {
-      const url = prefix + '/dailies/all?week=' + this.showWeek +
+      const url = prefix + '/documents?type=all&week=' + this.showWeek +
         '&grade=' + this.showGrade + '&format=' + format
       this.downloading = true
       axios.get(url)
         .then((res) => {
-          let fl = res.data
+          let fl = res.data.file_path
           fl.forEach((v, i) => {
             i += 1
             this.downloading = false
-            const link = prefix + '/download?file=' + v
+            const link = prefix + '/downloads?file=' + v
             // window.open(link)
             window.frames['download' + i].src = link
           })
@@ -305,7 +305,7 @@ export default {
         })
     },
     exportReport() {
-      const url = prefix + '/documents?format=docx&type=report&week=' +
+      const url = prefix + '/documents?format=pdf&type=report&week=' +
         this.showWeek + '&grade=' + this.showGrade + '&sex=' + this.showSex
       this.downloading = true
       axios.get(url)
@@ -322,7 +322,7 @@ export default {
         })
     },
     exportNotice() {
-      const url = prefix + '/documents?format=docx&type=notice&week=' + this.showWeek +
+      const url = prefix + '/documents?format=pdf&type=notice&week=' + this.showWeek +
         '&grade=' + this.showGrade
       this.downloading = true
       axios.get(url)

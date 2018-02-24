@@ -76,7 +76,7 @@ class DailyService extends BaseService {
   suggestion() {
     return new Promise(async (resolve, reject) => {
       let client: MongoClient = await MongoClient.connect(dburl)
-      let collection: Collection = client.db('sanitation').collection('daily')
+      let collection: Collection = client.db('sanitation').collection('dailies')
       try {
         let cursor = await collection.aggregate([{
           $project: {

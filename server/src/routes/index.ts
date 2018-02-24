@@ -76,6 +76,8 @@ router.get('/dormitories', ClassController.getDormitory)
 
 router.get('/documents', DocumentController.export)
 
+router.get('/downloads', DocumentController.download)
+
 export { router as index }
 
 

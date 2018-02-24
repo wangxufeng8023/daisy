@@ -273,7 +273,7 @@ export default {
       this.newRecord.date = e
     },
     saveRecord() {
-      const url = prefix + '/daily'
+      const url = prefix + '/dailies'
 
       this.newRecord.garden = this.currentRoom.garden
       this.newRecord.roomnumber = this.currentRoom.roomnumber
