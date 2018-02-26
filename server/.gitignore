@@ -1,4 +1,6 @@
-dist/*
+dist/
+!backup/.gitkeep
+backup/*
 
 # Logs
 logs
