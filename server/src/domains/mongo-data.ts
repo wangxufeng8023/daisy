@@ -60,7 +60,6 @@ class MongoData {
   find(condition: any) {
     return new Promise(async (resolve, reject) => {
       try {
-        console.log('db', dburl)
         let client = await MongoClient.connect(dburl, this.options)
         const db = client.db(dbname)
         let r = await db
