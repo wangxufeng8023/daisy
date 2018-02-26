@@ -48,7 +48,7 @@ class Utils {
       path.join(
         __dirname,
         '../../backup/',
-        moment().format('YYYYMMDD'),
+        'daisy_' + moment().format('YYYYMMDD'),
         collection + '_' + moment().format('YYYYMMDD') + '.json'
       )
     )
