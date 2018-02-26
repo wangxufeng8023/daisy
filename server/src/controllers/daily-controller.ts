@@ -9,7 +9,6 @@
  */
 
 import * as Koa from 'koa'
-import { DaisyConfig } from '../types/daisy'
 
 import { DailyService } from '../services/daily-service'
 import { DailyRepository } from '../repositories/daily-repository'

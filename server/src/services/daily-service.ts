@@ -12,11 +12,7 @@ import * as Koa from "koa"
 import { BaseService } from "./base-service"
 
 import { MongoClient, ObjectId, Db, Collection, Cursor } from "mongodb"
-import { DaisyConfig } from "../types/daisy"
 import { DailyRepository } from "../repositories/daily-repository"
-
-let config: DaisyConfig = require('../config/daisyconfig.json')
-let dburl: string = config.dburl
 
 
 /**
@@ -33,8 +29,8 @@ class DailyService extends BaseService {
   _assembleCondition(where: any) {
     let queryList: any[] = [{
       date: {
-        $gte: new Date(config.daterange.from),
-        $lte: new Date(config.daterange.to),
+        $gte: new Date(this.config.daterange.from),
+        $lte: new Date(this.config.daterange.to),
       }
     }]
     for (let k in where) {

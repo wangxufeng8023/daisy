@@ -22,7 +22,7 @@ import { DocumentController } from "../controllers/document-controller"
 import { DaisyConfig } from "../types/daisy"
 
 
-const config: DaisyConfig = require('../config/daisyconfig.json')
+const config: DaisyConfig = require('../../config/daisyconfig.json')
 router.prefix(config.url_prefix)
 
 import { ClassService } from '../services/test-service'

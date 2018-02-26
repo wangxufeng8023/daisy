@@ -12,9 +12,6 @@ import * as Koa from "koa"
 import { BaseService } from "./base-service"
 import { ClassRepository } from "../repositories/class-repository"
 
-import { DaisyConfig } from "../types/daisy"
-const config: DaisyConfig = require('../config/daisyconfig.json')
-const dburl: string = config.dburl
 
 /**
  * 班级宿舍类，包括增删改查函数。

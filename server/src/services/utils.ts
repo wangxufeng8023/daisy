@@ -13,17 +13,20 @@ import * as path from 'path'
 import * as moment from 'moment'
 import { spawn } from 'child_process'
 
-const configFile: string = path.join(__dirname, '../config/daisyconfig.json')
-
 import { DaisyConfig } from '../types/daisy'
 
 /**
  * 工具类，读取保存配置文件，备份数据库。
  */
 class Utils {
-  static saveSetting(configObj: any) {
+  static saveSetting(configObj: DaisyConfig) {
     return new Promise(
       (resolve: (value?: string) => void, reject: (error?: any) => void) => {
+        const configFile: string = path.join(
+          __dirname,
+          '../../config/daisyconfig.json'
+        )
+
         fs.writeFile(
           configFile,
           JSON.stringify(configObj, null, 4),

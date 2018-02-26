@@ -3,21 +3,24 @@
 /**
  * @author Angela-1 <ruoshui_engr@163.com>
  * 本文件是雏菊-学校内务检查管理系统的一部分。
- * 
+ *
  * © 2017-2018 Angela 版权所有。开源仅用于学术交流分享，商业使用请联系作者。
  */
 
-import * as Koa from "koa"
+import * as Koa from 'koa'
 
+import { DaisyConfig } from '../types/daisy'
 
 /**
  * 基本服务类。
  */
 abstract class BaseService {
   repository: any
+  config: DaisyConfig
 
   constructor(repository: any) {
     this.repository = repository
+    this.config = require('../../config/daisyconfig.json')
   }
 
   abstract _assembleCondition(where: any): any
@@ -52,11 +55,6 @@ abstract class BaseService {
     const objId = ctx.params.id
     return this.repository.delete(objId)
   }
-
-
-
-
 }
 
 export { BaseService }
-

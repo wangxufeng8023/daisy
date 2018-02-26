@@ -12,10 +12,6 @@ import * as Koa from 'koa'
 import { BaseService } from './base-service'
 import { DocumentRepository } from '../repositories/document-repository'
 
-import { DaisyConfig } from '../types/daisy'
-
-let config: DaisyConfig = require('../config/daisyconfig.json')
-
 import { TemplateFactory } from '../domains/templater-factory'
 import { ReportTemplate } from '../domains/report-template'
 
@@ -28,8 +24,8 @@ class DocumentService extends BaseService {
     let queryList: any[] = [
       {
         date: {
-          $gte: new Date(config.daterange.from),
-          $lte: new Date(config.daterange.to)
+          $gte: new Date(this.config.daterange.from),
+          $lte: new Date(this.config.daterange.to)
         }
       }
     ]

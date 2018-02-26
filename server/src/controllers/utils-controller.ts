@@ -12,11 +12,11 @@ import * as Koa from 'koa'
 import { MongoClient } from 'mongodb'
 import * as moment from 'moment'
 
-import { DaisyConfig } from '../types/daisy'
+
 import { ClassService } from '../services/class-service'
 import { Utils } from '../services/utils'
-
-let config: DaisyConfig = require('../config/daisyconfig.json')
+import { DaisyConfig } from '../types/daisy'
+let config: DaisyConfig = require('../../config/daisyconfig.json')
 
 /**
  * 工具类控制器

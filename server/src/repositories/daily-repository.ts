@@ -10,7 +10,6 @@
 
 import * as Koa from "koa"
 import { BaseRepository } from "./base-repository"
-import { DaisyConfig } from "../types/daisy"
 
 import { MongoClient, ObjectId, Db, Collection, Cursor } from "mongodb"
 

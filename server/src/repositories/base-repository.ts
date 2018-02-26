@@ -3,11 +3,11 @@
 /**
  * @author Angela-1 <ruoshui_engr@163.com>
  * 本文件是雏菊-学校内务检查管理系统的一部分。
- * 
+ *
  * © 2017-2018 Angela 版权所有。开源仅用于学术交流分享，商业使用请联系作者。
  */
 
-import * as Koa from "koa"
+import * as Koa from 'koa'
 import {
   MongoClient,
   Db,
@@ -16,9 +16,8 @@ import {
   MongoClientOptions
 } from 'mongodb'
 
-import { MongoData } from "../domains/mongo-data"
-
-import { DaisyConfig } from "../types/daisy"
+import { MongoData } from '../domains/mongo-data'
+import { DaisyConfig } from '../types/daisy'
 
 /**
  * 基本数据服务类。
@@ -27,13 +26,12 @@ abstract class BaseRepository {
   collection: string
   config: DaisyConfig
   options: MongoClientOptions
-  
 
   constructor(collection: string) {
     this.collection = collection
-    this.config = require('../config/daisyconfig.json')
-     this.options = new Object()
-     this.options.family = 4
+    this.config = require('../../config/daisyconfig.json')
+    this.options = new Object()
+    this.options.family = 4
   }
 
   /**
@@ -63,4 +61,3 @@ abstract class BaseRepository {
 }
 
 export { BaseRepository }
-

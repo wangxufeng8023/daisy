@@ -12,15 +12,13 @@ import * as moment from 'moment'
 
 import { Template } from './template'
 import { DaisyConfig } from '../types/daisy'
-
-const config: DaisyConfig = require('../config/daisyconfig.json')
-const schoolterm = config.schoolterm
+const config: DaisyConfig = require('../../config/daisyconfig.json')
 
 class ReportTemplate extends Template {
   constructor(format: string, data: any) {
     let newDateFormat = moment(data.date).format('YYYY年M月D日')
     data.date = newDateFormat
-    data.schoolterm = schoolterm
+    data.schoolterm = config.schoolterm
     let title =
       `高${data.grade}届${data.schoolterm}第${data.week}周${
         data.sex

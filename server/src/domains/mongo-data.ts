@@ -17,7 +17,7 @@ import {
 } from 'mongodb'
 import { DaisyConfig } from '../types/daisy'
 
-const config: DaisyConfig = require('../config/daisyconfig.json')
+const config: DaisyConfig = require('../../config/daisyconfig.json')
 const dburl: string = config.dburl
 const dbname: string = config.dbname
 
@@ -60,6 +60,7 @@ class MongoData {
   find(condition: any) {
     return new Promise(async (resolve, reject) => {
       try {
+        console.log('db', dburl)
         let client = await MongoClient.connect(dburl, this.options)
         const db = client.db(dbname)
         let r = await db

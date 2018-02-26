@@ -13,7 +13,7 @@ import { BaseService } from './base-service'
 import { ClassRepository } from '../repositories/class-repository'
 
 import { DaisyConfig } from '../types/daisy'
-const config: DaisyConfig = require('../config/daisyconfig.json')
+const config: DaisyConfig = require('../../config/daisyconfig.json')
 const dburl: string = config.dburl
 const dbname: string = config.dbname
 import { MongoData } from '../domains/mongo-data'

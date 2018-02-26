@@ -17,10 +17,6 @@ import {
   Cursor
 } from 'mongodb'
 
-import { DaisyConfig } from "../types/daisy"
-
-
-
 /**
  * 内务检查类，包含内务检查功能函数。
  */

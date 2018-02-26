@@ -12,8 +12,6 @@ import * as Koa from 'koa'
 import * as send from 'koa-send' 
 import * as path from 'path'
 
-import { DaisyConfig } from '../types/daisy'
-
 import { DocumentService } from '../services/document-service'
 import { DocumentRepository } from '../repositories/document-repository'
 
