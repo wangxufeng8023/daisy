@@ -339,7 +339,7 @@ export default {
       return row
     },
     exportData() {
-      const url = prefix + '/documents?format=docx&type=dormitory&grade=' + this.showGrade +
+      const url = prefix + '/documents?format=pdf&type=dormitory&grade=' + this.showGrade +
         '&week=' + 0
       this.downloading = true
       axios.get(url)
