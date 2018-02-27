@@ -1,9 +1,9 @@
 ' 
-' @file 转换 Word 文档为 pdf 格式的 VB 脚本。
+' @file convert.vbs 转换 Word 文档为 pdf 格式的 VB 脚本。
 ' @author ruoshui_engr@163.com (Angela-1)
 ' 本文件是雏菊-学校内务检查管理系统的一部分。
 ' 
-' © 2017 Angela 版权所有。代码开源仅用于学术交流分享，商业使用请联系作者。
+' © 2017-2018 Angela 版权所有。代码开源仅用于学术交流分享，商业使用请联系作者。
 ' 
 
 Set args = WScript.Arguments

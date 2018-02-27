@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 /**
+ * @file mongo-data.ts 数据持久层
  * @author Angela-1 <ruoshui_engr@163.com>
  * 本文件是雏菊-学校内务检查管理系统的一部分。
  *
@@ -22,7 +23,7 @@ const dburl: string = config.dburl
 const dbname: string = config.dbname
 
 /**
- * 数据库增删改查功能函数。
+ * 数据持久层类
  */
 class MongoData {
   collection: string
@@ -38,7 +39,8 @@ class MongoData {
     this.options.family = 4
   }
   /**
-   * 新增记录。
+   * 保存数据到数据库
+   * @param data 要持久的数据
    */
   create(data: any) {
     return new Promise(async (resolve, reject) => {
@@ -55,7 +57,8 @@ class MongoData {
     })
   }
   /**
-   * 查询记录。
+   * 从数据库查找数据
+   * @param condition 查找条件
    */
   find(condition: any) {
     return new Promise(async (resolve, reject) => {
@@ -99,7 +102,8 @@ class MongoData {
     })
   }
   /**
-   * 删除一条记录。
+   * 删除一条数据
+   * @param objId 要删除的数据 id
    */
   delete(objId: any) {
     return new Promise(async (resolve, reject) => {

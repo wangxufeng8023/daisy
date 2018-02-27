@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * @file template.ts 模板文档抽象类
+ * @file dormitory-template.ts 宿舍情况文档类
  * @author Angela-1 <ruoshui_engr@163.com>
  * 本文件是雏菊-学校内务检查管理系统的一部分。
  *
@@ -14,6 +14,9 @@ import { Template } from './template'
 import { DaisyConfig } from '../types/daisy'
 const config: DaisyConfig = require('../../config/daisyconfig.json')
 
+/**
+ * 宿舍情况文档类
+ */
 class DormitoryTemplate extends Template {
   constructor(format: string, data: any) {
     let newDateFormat = moment(data.date).format('YYYY年M月D日')

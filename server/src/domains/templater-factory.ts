@@ -11,6 +11,9 @@ import { ReportTemplate } from './report-template'
 import { NoticeTemplate } from './notice-template'
 import { DormitoryTemplate } from './dormitory-template'
 
+/**
+ * 模板文档工厂类，通过名称生成相应的模板类
+ */
 class TemplateFactory {
   static createTemplate(name: string, format: string, data: any) {
     switch (name) {

@@ -16,21 +16,37 @@ import * as childProcess from 'child_process'
 
 let Docxtemplater = require('docxtemplater')
 
-const resourcePath = path.join(__dirname, '/../public/resource/')
-const archivePath = path.join(__dirname, '/../public/archive/')
+const resourcePath = path.join(__dirname, '../public/resource/')
+const archivePath = path.join(__dirname, '../public/archive/')
 
+/**
+ * 枚举支持的格式
+ */
 const enum Format {
   DOCX = 'DOCX',
   PDF = 'PDF'
 }
 
+/**
+ * 模板文件生成的抽象类，提供模板生成的基本函数
+ */
 abstract class Template {
+  /** 模板名称 */
   name: string
+
+  /** 模板文件名 */
   title: string
+
+  /** 模板格式 */
   format: string
+
+  /** 模板源文件路径 */
   templateFilePath: string
+
+  /** 模板生成需要的数据 */
   data: any
 
+  /** 构造函数 */
   constructor(
     name: string,
     title: string,
@@ -40,11 +56,15 @@ abstract class Template {
   ) {
     this.name = name
     this.title = title
-    this.format = format === 'pdf' ? Format.PDF : Format.DOCX
+    this.format = (format === 'pdf') ? Format.PDF : Format.DOCX
     this.templateFilePath = resourcePath + templateFile
     this.data = data
   }
 
+  /**
+   * 检测文件是否存在
+   * @param filePath 文件路径
+   */
   static _exists(filePath: string): Promise<string> {
     return new Promise((resolve, reject) => {
       fs.stat(filePath, (err: NodeJS.ErrnoException, stats: any) => {
@@ -61,6 +81,10 @@ abstract class Template {
     })
   }
 
+  /**
+   * 转换文件为pdf格式
+   * @param filePath 文件路径
+   */
   static _convert(filePath: string): Promise<string> {
     return new Promise((resolve, reject) => {
       let absFilePath = path.resolve(filePath)
@@ -80,6 +104,9 @@ abstract class Template {
     })
   }
 
+  /**
+   * 生成文件
+   */
   async generate() {
     let result: string
     if (this.format === Format.PDF) {
@@ -89,7 +116,9 @@ abstract class Template {
     }
     return result
   }
-
+  /**
+   * 生成 docx 格式文件
+   */
   private generateDocx(): Promise<string> {
     return new Promise((resolve, reject) => {
       fs.readFile(
@@ -119,7 +148,9 @@ abstract class Template {
       )
     })
   }
-
+  /**
+   * 生成 pdf 格式文件
+   */
   private generatePdf(): Promise<string> {
     return new Promise(async (resolve, reject) => {
       const resultFilePath = await this.generateDocx()
