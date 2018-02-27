@@ -28,13 +28,14 @@ class DocumentController {
     let ds = await new DocumentService(new DocumentRepository())
     const { type } = ctx.query
     if (type === 'all') {
+      ctx.query.type = 'notice'
+      let doc3 = await ds.export(ctx)
       ctx.query.type = 'report'
       ctx.query.sex = '男生'
       let doc1 = await ds.export(ctx)
       ctx.query.sex = '女生'
       let doc2 = await ds.export(ctx)
-      ctx.query.type = 'notice'
-      let doc3 = await ds.export(ctx)
+      
       let docLinks = [doc1, doc2, doc3].map(v => {
         return path.basename(v)
       })
