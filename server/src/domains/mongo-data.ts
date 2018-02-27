@@ -8,14 +8,7 @@
  * © 2017-2018 Angela 版权所有。开源仅用于学术交流分享，商业使用请联系作者。
  */
 
-import {
-  MongoClient,
-  ObjectId,
-  Db,
-  Collection,
-  Cursor,
-  MongoClientOptions
-} from 'mongodb'
+import { MongoClient, ObjectId, Db, MongoClientOptions } from 'mongodb'
 import { DaisyConfig } from '../types/daisy'
 
 const config: DaisyConfig = require('../../config/daisyconfig.json')
@@ -28,7 +21,7 @@ const dbname: string = config.dbname
 class MongoData {
   collection: string
   /**
-   * 连接的时候必须设置 IPV4，网上搜索到这个是一个 BUG，文档可能会更新，同时默认值可能会修改为 4
+   * :BUG: 连接的时候必须设置 IPV4，网上搜索到这个是一个 BUG，文档可能会更新，同时默认值可能会修改为 4
    * 设置 options 为 { family: 4 }
    */
   options: MongoClientOptions
@@ -38,6 +31,9 @@ class MongoData {
     this.options = { family: 4 }
   }
 
+  /**
+   * 获取数据库连接
+   */
   async getClient(): Promise<MongoClient> {
     return await MongoClient.connect(dburl, this.options)
   }
@@ -73,8 +69,6 @@ class MongoData {
           .find(condition)
           .toArray()
         resolve(r)
-        console.log(r)
-
         client.close()
       } catch (err) {
         console.log(err.stack)
