@@ -33,13 +33,13 @@ class UtilsController {
     const url = config.dburl
     try {
       let client: MongoClient = await MongoClient.connect(config.dburl)
-      let db = client.db('sanitation')
+      let db = client.db(config.dbname)
       switch (ctx.query.db) {
         case InitDbCollection.CLASSES:
           db.collection('classes').drop()
           break
         case InitDbCollection.DAILY:
-          db.collection('daily').drop()
+          db.collection('dailies').drop()
           break
         default:
           ctx.body = {
