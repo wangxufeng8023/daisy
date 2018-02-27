@@ -9,6 +9,7 @@
  */
 
 import * as fs from 'fs'
+import * as os from 'os'
 import * as path from 'path'
 import * as JSZip from 'jszip'
 import * as childProcess from 'child_process'
@@ -22,7 +23,6 @@ const enum Format {
   DOCX = 'DOCX',
   PDF = 'PDF'
 }
-
 
 abstract class Template {
   name: string
@@ -122,8 +122,12 @@ abstract class Template {
 
   private generatePdf(): Promise<string> {
     return new Promise(async (resolve, reject) => {
-      let resultFilePath = await this.generateDocx()
-      let pdfFilePath = await Template._convert(resultFilePath)
+      const resultFilePath = await this.generateDocx()
+      const platform = os.platform()
+      if (platform !== 'win32') {
+        resolve(resultFilePath)
+      }
+      const pdfFilePath = await Template._convert(resultFilePath)
       if (pdfFilePath.length > 0) {
         resolve(pdfFilePath)
       } else {
