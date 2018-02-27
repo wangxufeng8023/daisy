@@ -35,8 +35,11 @@ class MongoData {
 
   constructor(collection: string) {
     this.collection = collection
-    this.options = new Object()
-    this.options.family = 4
+    this.options = { family: 4 }
+  }
+
+  async getClient(): Promise<MongoClient> {
+    return await MongoClient.connect(dburl, this.options)
   }
   /**
    * 保存数据到数据库
@@ -45,7 +48,7 @@ class MongoData {
   create(data: any) {
     return new Promise(async (resolve, reject) => {
       try {
-        let client: MongoClient = await MongoClient.connect(dburl, this.options)
+        let client: MongoClient = await this.getClient()
         const db = client.db(dbname)
         let r = await db.collection(this.collection).insertOne(data)
         resolve(r.insertedId)
@@ -63,13 +66,15 @@ class MongoData {
   find(condition: any) {
     return new Promise(async (resolve, reject) => {
       try {
-        let client = await MongoClient.connect(dburl, this.options)
+        let client = await this.getClient()
         const db = client.db(dbname)
         let r = await db
           .collection(this.collection)
           .find(condition)
           .toArray()
         resolve(r)
+        console.log(r)
+
         client.close()
       } catch (err) {
         console.log(err.stack)
@@ -85,7 +90,7 @@ class MongoData {
     return new Promise(async (resolve, reject) => {
       const id: ObjectId = new ObjectId(objId)
       try {
-        let client = await MongoClient.connect(dburl, this.options)
+        let client = await this.getClient()
         const db = client.db(dbname)
         let r = await db.collection(this.collection).updateOne(
           {
@@ -109,7 +114,7 @@ class MongoData {
     return new Promise(async (resolve, reject) => {
       const id: ObjectId = new ObjectId(objId)
       try {
-        let client = await MongoClient.connect(dburl, this.options)
+        let client = await this.getClient()
         const db = client.db(dbname)
         let r = await db.collection(this.collection).deleteOne({ _id: id })
         resolve(r.deletedCount)
