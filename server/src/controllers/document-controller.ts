@@ -35,15 +35,14 @@ class DocumentController {
       let doc2 = await ds.export(ctx)
       ctx.query.type = 'notice'
       let doc3 = await ds.export(ctx)
-      let doc_links = [doc1, doc2, doc3].map(v => {
+      let docLinks = [doc1, doc2, doc3].map(v => {
         return path.basename(v)
       })
-      console.log(doc_links)
-      ctx.body = { file_path: doc_links }
+      ctx.body = { file_path: docLinks }
     } else {
       let doc = await ds.export(ctx)
-      let doc_link = path.basename(doc)
-      ctx.body = { file_path: doc_link }
+      let docLink = path.basename(doc)
+      ctx.body = { file_path: docLink }
     }
   }
   /**
