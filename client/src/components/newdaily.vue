@@ -42,6 +42,10 @@
 .warning {
   border: 1px solid red;
 }
+
+.subsection {
+  min-height: 200px;
+}
 </style>
 <template>
   <div class="subsection">

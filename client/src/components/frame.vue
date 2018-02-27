@@ -26,7 +26,6 @@
 }
 
 .frame-content {
-  min-height: 200px;
   max-width: 1024px;
   margin: 20px auto;
   overflow: hidden;
