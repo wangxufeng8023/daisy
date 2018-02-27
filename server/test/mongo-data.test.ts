@@ -1,7 +1,7 @@
 
 
 import { MongoData } from "../src/domains/mongo-data"
-
+import {} from "jest"
 
 
 describe('测试 MongoData', () => {
