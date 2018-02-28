@@ -7,7 +7,8 @@
     "dev": "./node_modules/.bin/nodemon dist/server.js",
     "prd": "pm2 start dist/server.js",
     "test": "jest",
-    "assets": "ts-node copyStaticAssets.ts"
+    "assets": "ts-node copyStaticAssets.ts",
+    "ci": "npm run test && tsc && npm run assets && npm run dev"
   },
   "dependencies": {
     "debug": "^2.6.3",
