@@ -1,6 +1,8 @@
 dist/
 backup/*
 !backup/.gitkeep
+src/public/archive/*
+!src/public/archive/.gitkeep
 
 
 # Logs

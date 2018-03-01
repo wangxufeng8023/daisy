@@ -1,5 +1,7 @@
 import { DailyService } from '../src/services/daily-service'
+import { DocumentService } from '../src/services/document-service'
 import { DailyRepository } from '../src/repositories/daily-repository'
+import { DocumentRepository } from '../src/repositories/document-repository'
 
 import {} from 'jest'
 
@@ -53,5 +55,23 @@ describe('test dailies service', () => {
   test('should delete daily.', async () => {
     let d: any = await new DailyRepository('dailies').delete(id)
     expect(d).toBe(1)
+  })
+})
+
+describe('test document service', () => {
+  test('shoud get class dormitory.', async () => {
+    let ctx = context({ url: '/api/v2/documents' })
+    ctx.search = '?grade=2019&type=dormitory&format=docx'
+    let ds = await new DocumentService(new DocumentRepository())
+    let doc = await ds.export(ctx)
+    expect(doc.split('.')[1]).toBe('docx')
+  })
+
+  test('shoud get class dormitory.', async () => {
+    let ctx = context({ url: '/api/v2/documents' })
+    ctx.search = '?grade=2019&type=dormitory&format=pdf'
+    let ds = await new DocumentService(new DocumentRepository())
+    let doc = await ds.export(ctx)
+    expect(doc.split('.')[1]).toBe('pdf')
   })
 })
