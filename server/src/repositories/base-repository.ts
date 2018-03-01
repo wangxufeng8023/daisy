@@ -30,8 +30,7 @@ abstract class BaseRepository {
   constructor(collection: string) {
     this.collection = collection
     this.config = require('../../config/daisyconfig.json')
-    this.options = new Object()
-    this.options.family = 4
+    this.options = { family: 4 }
   }
 
   /**

@@ -23,6 +23,7 @@ class DailyController {
    */
   static async index(ctx: Koa.Context, next: Function) {
     const r = await new DailyService(new DailyRepository('dailies')).find(ctx)
+    // ctx.body = ctx.querystring
     ctx.body = r
   }
   /**
