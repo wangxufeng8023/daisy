@@ -1,6 +1,8 @@
 {
-  "name": "tskoa2",
-  "version": "0.1.0",
+  "name": "雏菊 - 学校内务检查系统后端服务器",
+  "version": "3.0.0",
+  "description": "基于 koa2 搭建后端服务器。",
+  "author": "angela",
   "private": true,
   "scripts": {
     "start": "node dist/server.js",
@@ -51,13 +53,6 @@
       "^.+\\.tsx?$": "ts-jest"
     },
     "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "jsx",
-      "json",
-      "node"
-    ]
+    "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json", "node"]
   }
 }
