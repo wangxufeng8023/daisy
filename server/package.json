@@ -10,7 +10,7 @@
     "prd": "pm2 start dist/server.js",
     "test": "jest",
     "assets": "ts-node copyStaticAssets.ts",
-    "ci": "npm run test && tsc && npm run assets && npm run dev"
+    "ci": "npm run test && tsc && npm run assets"
   },
   "dependencies": {
     "debug": "^2.6.3",
