@@ -64,6 +64,7 @@ router.get('/classes', ClassController.index)
 router.post('/classes', ClassController.create)
 router.put('/classes/:id', ClassController.update)
 router.delete('/classes/:id', ClassController.delete)
+router.get('/classes/grades', ClassController.getGrades)
 
 
 router.get('/dailies', DailyController.index)

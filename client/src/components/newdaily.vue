@@ -61,7 +61,7 @@
         <div class="toolbar-item">
           <label for="">年级：</label>
           <Select style="width:100px" v-model="showGrade">
-            <Option v-for="(item,index) in gradeList" :value="item" :key="index+item">{{ item }}</Option>
+            <Option v-for="(item,index) in gradeList" :value="item" :key="'g'+index">{{ item }}</Option>
           </Select>
         </div>
         <div class="toolbar-item">
@@ -86,7 +86,7 @@
       </div>
     </div>
     <Modal v-model="newRecordModal" width="1000" :styles="{top: '20px'}">
-      <h2 slot="header">{{ roomTitle }}</h2>
+      <h2 slot="header">{{ roomTitle }}</h2>{{this.newRecord}}
       <div class="layout horizontal">
         <div>
           <Form :label-width="60" label-position="left">
@@ -94,10 +94,10 @@
               <Input-number :max="30" :class="newRecord.week === 0 ? 'warning' : ''" :min="1" v-model="newRecord.week"></Input-number>
             </Form-item>
             <Form-item label="日期：">
-              <Date-picker readonly v-model="newRecord.date" type="date" style="width: 220px"></Date-picker>
+              <Date-picker readonly v-model="selectDate" type="date" style="width: 220px"></Date-picker>
             </Form-item>
             <Form-item>
-              <Date-picker :open="true" v-on:on-change="getDate" v-model="newRecord.date" type="date">
+              <Date-picker :open="true" v-on:on-change="getDate" v-model="selectDate" type="date">
                 <div></div>
               </Date-picker>
             </Form-item>
@@ -174,28 +174,43 @@ export default {
   data() {
     return {
       loading: false,
-      gardenList: [
-        '雅苑', '和苑', '馨苑'
-      ],
+      gardenList: ['雅苑', '和苑', '馨苑'],
       issueDesc: {
-        bed: [
-          '1床', '2床', '3床', '4床', '5床', '6床', '7床', '8床', '空床'
-        ],
+        bed: ['1床', '2床', '3床', '4床', '5床', '6床', '7床', '8床', '空床'],
         pos: [
-          '阳台', '水池', '卫生间', '洗漱台', '脸盆', '厕坑',
-          '室内', '桌子', '柜子', '窗台', '地板', '墙面', '下', '上'
+          '阳台',
+          '水池',
+          '卫生间',
+          '洗漱台',
+          '脸盆',
+          '厕坑',
+          '室内',
+          '桌子',
+          '柜子',
+          '窗台',
+          '地板',
+          '墙面',
+          '下',
+          '上'
         ],
-        good: [
-          '床单', '被子', '物品', '洗漱用品', '鞋子', '毛巾'
-        ],
+        good: ['床单', '被子', '物品', '洗漱用品', '鞋子', '毛巾'],
         issue: [
-          '皱', '脏', '有灰', '不规范', '不整齐', '乱放', '垃圾未倒', '有油污', '有污渍'
+          '皱',
+          '脏',
+          '有灰',
+          '不规范',
+          '不整齐',
+          '乱放',
+          '垃圾未倒',
+          '有油污',
+          '有污渍'
         ]
       },
       gradeList: [],
       newRecordModal: false,
       currentRoom: {},
       roomsData: [],
+      selectDate: moment().format('YYYY-MM-DD'),
       newRecord: {
         date: moment().format('YYYY-MM-DD'),
         week: 0,
@@ -220,9 +235,19 @@ export default {
   },
   computed: {
     roomTitle: function() {
-      const roomTitle = this.currentRoom.grade + '届' + this.currentRoom.class + '班' + '-' +
-        this.currentRoom.roomnumber + '-' + this.currentRoom.leader + ' ' +
-        this.currentRoom.garden + '-' + this.currentRoom.sex
+      const roomTitle =
+        this.currentRoom.grade +
+        '届' +
+        this.currentRoom.class +
+        '班' +
+        '-' +
+        this.currentRoom.roomnumber +
+        '-' +
+        this.currentRoom.leader +
+        ' ' +
+        this.currentRoom.garden +
+        '-' +
+        this.currentRoom.sex
       return roomTitle
     }
   },
@@ -250,20 +275,19 @@ export default {
     },
     fetchGrades() {
       return new Promise((resolve, reject) => {
-        const url = prefix + '/dailies/grades'
-        const that = this
-
-        axios.get(url)
-          .then(function(res) {
-            that.gradeList = []
-            res.data.forEach(v => {
-              that.gradeList.push(v.grade)
+        const url = prefix + '/classes/grades'
+        axios
+          .get(url)
+          .then(res => {
+            this.gradeList = []
+            res.data[0].grades.forEach(v => {
+              this.gradeList.push(v)
             })
-            that.gradeList.sort(utils.sortNumber)
-            that.showGrade = res.data[0].grade
-            resolve(that.showGrade)
+            this.gradeList.sort(utils.sortNumber)
+            this.showGrade = this.gradeList[0]
+            resolve(this.showGrade)
           })
-          .catch(function(err) {
+          .catch(err => {
             reject(err)
             console.log(err)
           })
@@ -287,8 +311,11 @@ export default {
       this.newRecord.grade = this.currentRoom.grade
       this.newRecord.sex = this.currentRoom.sex
 
+      this.newRecord.week = this.newRecord.week.toString()
+
       const that = this
-      axios.post(url, this.newRecord)
+      axios
+        .post(url, this.newRecord)
         .then(function(res) {
           that.newRecordModal = false
           that.lastDesc = that.newRecord.desc
@@ -311,10 +338,11 @@ export default {
       const url = prefix + '/dormitories?grade=' + this.showGrade
       const that = this
 
-      axios.get(url)
+      axios
+        .get(url)
         .then(function(res) {
           let rooms = res.data.slice()
-          rooms.forEach((a) => {
+          rooms.forEach(a => {
             let floors = {
               '1': [],
               '2': [],
@@ -325,7 +353,7 @@ export default {
             }
             let tf = a.rooms.map(utils.getFloor)
 
-            tf.forEach((dd) => {
+            tf.forEach(dd => {
               floors[dd.floor].push(dd)
             })
             for (let ff in floors) {
@@ -345,7 +373,8 @@ export default {
       const url = prefix + '/dailies/suggestions'
       const that = this
 
-      axios.get(url)
+      axios
+        .get(url)
         .then(function(res) {
           that.allSuggestion = res.data[0].desc
         })
@@ -356,8 +385,7 @@ export default {
     unique(arr) {
       let result = []
       let hash = {}
-      for (let i = 0, elem;
-        (elem = arr[i]) != null; i++) {
+      for (let i = 0, elem; (elem = arr[i]) != null; i++) {
         if (!hash[elem] && elem !== '') {
           result.push(elem)
           hash[elem] = true
@@ -367,7 +395,7 @@ export default {
     },
     showSuggestion: function() {
       let str = this.newRecord.desc
-      if (str === '' || (str.indexOf('|') > 0)) {
+      if (str === '' || str.indexOf('|') > 0) {
         this.suggestion = []
       } else {
         let re = str.match(/^\d+床/)
@@ -376,13 +404,18 @@ export default {
           str = str.replace(/\d+床/, '')
           re2 = new RegExp('^\\d+床' + str)
         }
-        let nsug = this.allSuggestion.filter((v) => {
-          return v.match(re2)
-        }).filter((v) => {
-          return v.indexOf('|') === -1
-        }).map((v) => {
-          return v.replace(/\d+床/, '').replace(str, '')
-        }).sort(utils.sortLen).slice(0, 10)
+        let nsug = this.allSuggestion
+          .filter(v => {
+            return v.match(re2)
+          })
+          .filter(v => {
+            return v.indexOf('|') === -1
+          })
+          .map(v => {
+            return v.replace(/\d+床/, '').replace(str, '')
+          })
+          .sort(utils.sortLen)
+          .slice(0, 10)
         this.suggestion = this.unique(nsug)
       }
     }

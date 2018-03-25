@@ -15,25 +15,25 @@
         <label for="">年级：</label>
         <Select style="width:100px" v-model="showGrade">
           <Option v-for="(item,index) in gradeList" 
-            :value="item.grade" :key="index+item.grade">{{ item.grade }}</Option>
+            :value="item.grade" :key="'g'+index">{{ item.grade }}</Option>
         </Select>
       </div>
       <div class="toolbar-item">
         <label for="">周次：</label>
         <Select style="width:100px" v-model="showWeek">
-          <Option v-for="(item,index) in weekList" :value="item" :key="index+item">{{ item }}</Option>
+          <Option v-for="(item,index) in weekList" :value="item" :key="'w'+index">{{ item }}</Option>
         </Select>
       </div>
       <div class="toolbar-item">
         <label for="">院子：</label>
         <Select style="width:100px" v-model="showGarden">
-          <Option v-for="(item,index) in gardenList" :value="item" :key="index+item">{{ item }}</Option>
+          <Option v-for="(item,index) in gardenList" :value="item" :key="'n'+index">{{ item }}</Option>
         </Select>
       </div>
       <div class="toolbar-item">
         <label for="">性别：</label>
         <Select style="width:100px" v-model="showSex">
-          <Option v-for="(item,index) in sexList" :value="item" :key="index+item">{{ item }}</Option>
+          <Option v-for="(item,index) in sexList" :value="item" :key="'s'+index">{{ item }}</Option>
         </Select>
       </div>
       <Button @click="query">

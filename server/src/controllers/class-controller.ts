@@ -53,6 +53,11 @@ class ClassController {
     let r = await new ClassService('classes').getDormitory(ctx)
     ctx.body = r
   }
+
+  static async getGrades(ctx: Koa.Context, next: Function) {
+    let r = await new ClassService('classes').getGrades(ctx)
+    ctx.body = r
+  }
 }
 
 export { ClassController }

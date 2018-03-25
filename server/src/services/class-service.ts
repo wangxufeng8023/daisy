@@ -44,6 +44,10 @@ class ClassService extends BaseService {
     const condition = this._assembleCondition(ctx.query)
     return this.repository.getDormitory(condition)
   }
+
+  getGrades(ctx: Koa.Context) {
+    return this.repository.getGrades()
+  }
 }
 
 export { ClassService }

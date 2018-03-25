@@ -76,6 +76,38 @@ class ClassRepository extends BaseRepository {
       }
     })
   }
+
+  async getGrades() {
+    return new Promise(async (resolve, reject) => {
+      try {
+        let client: MongoClient = await MongoClient.connect(this.config.dburl, this.options)
+        let collection: Collection = client
+          .db(this.config.dbname)
+          .collection(this.collection)
+        let cursor = await collection.aggregate([
+          {
+            $project: {
+              grade: 1
+            }
+          },
+          {
+            $group: {
+              _id: {
+              },
+              grades: {
+                $addToSet: '$grade'
+              }
+            }
+          }
+        ])
+        let result = await cursor.toArray()
+        resolve(result)
+        client.close()
+      } catch (err) {
+        reject(err)
+      }
+    })
+  }
 }
 
 
