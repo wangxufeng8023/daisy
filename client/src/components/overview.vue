@@ -320,7 +320,6 @@ export default {
       const url =
         prefix + '/dailies?week=' + this.showWeek + '&grade=' + this.showGrade
       const that = this
-      console.log(url)
       axios
         .get(url)
         .then(function(res) {

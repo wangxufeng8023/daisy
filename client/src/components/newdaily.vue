@@ -124,8 +124,8 @@
                   <div style="width:20px;"></div>
                   清空
                   <span class="piece" @click="clearDesc">
-                   <Icon type="arrow-left-a"></Icon>
-                 </span>
+                    <Icon type="arrow-left-a"></Icon>
+                  </span>
                 </div>
                 <dl>
                   <dt>床号</dt>
@@ -265,13 +265,16 @@ export default {
       let span = a.target.childNodes[0].data
       this.newRecord.desc += span
     },
-    fetch() {
+    async fetch() {
       this.$Loading.start()
-      this.fetchGrades().then(() => {
-        this.fetchRoomsData()
-        this.$Loading.finish()
-      })
+      await this.fetchGrades()
+      await this.fetchRoomsData()
+
+      // this.fetchGrades().then(() => {
+      //   this.fetchRoomsData()
+      // })
       this.fetchDesc()
+      this.$Loading.finish()
     },
     fetchGrades() {
       return new Promise((resolve, reject) => {
@@ -335,39 +338,42 @@ export default {
       this.currentRoom = room
     },
     fetchRoomsData: function() {
-      const url = prefix + '/dormitories?grade=' + this.showGrade
-      const that = this
+      return new Promise((resolve, reject) => {
+        const url = prefix + '/dormitories?grade=' + this.showGrade
 
-      axios
-        .get(url)
-        .then(function(res) {
-          let rooms = res.data.slice()
-          rooms.forEach(a => {
-            let floors = {
-              '1': [],
-              '2': [],
-              '3': [],
-              '4': [],
-              '5': [],
-              '6': []
-            }
-            let tf = a.rooms.map(utils.getFloor)
-
-            tf.forEach(dd => {
-              floors[dd.floor].push(dd)
-            })
-            for (let ff in floors) {
-              if (floors[ff].length > 0) {
-                floors[ff].sort(utils.sortRoomNumber)
+        axios
+          .get(url)
+          .then(res => {
+            let rooms = res.data.slice()
+            rooms.forEach(a => {
+              let floors = {
+                '1': [],
+                '2': [],
+                '3': [],
+                '4': [],
+                '5': [],
+                '6': []
               }
-            }
-            a.rooms = floors
+              let tf = a.rooms.map(utils.getFloor)
+
+              tf.forEach(dd => {
+                floors[dd.floor].push(dd)
+              })
+              for (let ff in floors) {
+                if (floors[ff].length > 0) {
+                  floors[ff].sort(utils.sortRoomNumber)
+                }
+              }
+              a.rooms = floors
+            })
+            this.roomsData = rooms
+            resolve(rooms)
           })
-          that.roomsData = rooms
-        })
-        .catch(function(err) {
-          console.log(err)
-        })
+          .catch(function(err) {
+            reject(err)
+            console.log(err)
+          })
+      })
     },
     fetchDesc() {
       const url = prefix + '/dailies/suggestions'
