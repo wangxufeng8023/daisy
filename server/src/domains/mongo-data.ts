@@ -46,6 +46,7 @@ class MongoData {
       try {
         let client: MongoClient = await this.getClient()
         const db = client.db(dbname)
+        console.log('data', data)
         let r = await db.collection(this.collection).insertOne(data)
         resolve(r.insertedId)
         client.close()

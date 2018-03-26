@@ -30,6 +30,7 @@ abstract class BaseService {
    */
   create(ctx: Koa.Context) {
     let obj = ctx.request.body
+    obj.date = new Date(obj.date)
     return this.repository.create(obj)
   }
   /**

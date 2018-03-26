@@ -91,13 +91,13 @@
         <div>
           <Form :label-width="60" label-position="left">
             <Form-item label="周次：">
-              <Input-number :max="30" :class="newRecord.week === 0 ? 'warning' : ''" :min="1" v-model="newRecord.week"></Input-number>
+              <Input-number :max="30" :min="1" v-on:on-change="getWeek" :class="newRecord.week === '0' ? 'warning' : ''" v-model="selectWeek"></Input-number>
             </Form-item>
             <Form-item label="日期：">
-              <Date-picker readonly v-model="selectDate" type="date" style="width: 220px"></Date-picker>
+              <Date-picker readonly v-model="newRecord.date" type="date" style="width: 220px"></Date-picker>
             </Form-item>
             <Form-item>
-              <Date-picker :open="true" v-on:on-change="getDate" v-model="selectDate" type="date">
+              <Date-picker :open="true" v-model="newRecord.date" type="date">
                 <div></div>
               </Date-picker>
             </Form-item>
@@ -210,10 +210,10 @@ export default {
       newRecordModal: false,
       currentRoom: {},
       roomsData: [],
-      selectDate: moment().format('YYYY-MM-DD'),
+      selectWeek: 0,
       newRecord: {
         date: moment().format('YYYY-MM-DD'),
-        week: 0,
+        week: '0',
         garden: '',
         roomnumber: '',
         leader: '',
@@ -303,6 +303,10 @@ export default {
     getDate(e) {
       this.newRecord.date = e
     },
+    getWeek(e) {
+      this.newRecord.week = e.toString()
+      console.log(this.newRecord)
+    },
     saveRecord() {
       const url = prefix + '/dailies'
 
@@ -316,14 +320,15 @@ export default {
 
       this.newRecord.week = this.newRecord.week.toString()
 
-      const that = this
+      console.log(this.newRecord)
+
       axios
         .post(url, this.newRecord)
-        .then(function(res) {
-          that.newRecordModal = false
-          that.lastDesc = that.newRecord.desc
-          that.newRecord.desc = ''
-          that.$Message.info('新增一条检查记录。')
+        .then(res => {
+          this.newRecordModal = false
+          this.lastDesc = this.newRecord.desc
+          this.newRecord.desc = ''
+          this.$Message.info('新增一条检查记录。')
         })
         .catch(function(err) {
           console.log(err)

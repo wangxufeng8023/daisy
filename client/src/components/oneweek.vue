@@ -14,8 +14,7 @@
       <div class="toolbar-item">
         <label for="">年级：</label>
         <Select style="width:100px" v-model="showGrade">
-          <Option v-for="(item,index) in gradeList" 
-            :value="item.grade" :key="'g'+index">{{ item.grade }}</Option>
+          <Option v-for="(item,index) in gradeList" :value="item.grade" :key="'g'+index">{{ item.grade }}</Option>
         </Select>
       </div>
       <div class="toolbar-item">
@@ -54,23 +53,22 @@
           导出内务卫生通报批评
         </Button>
       </div>
-       <div>
-          <iframe v-for="nn in 3" :id="'download' + nn" :key="nn"
-          style="display: none;"></iframe>
-        </div>
+      <div>
+        <iframe v-for="nn in 3" :id="'download' + nn" :key="nn" style="display: none;"></iframe>
+      </div>
       <div class="toolbar-item">
         <Dropdown v-on:on-click="exportAll">
-        <Button type="default">
+          <Button type="default">
             <Icon type="ios-download-outline"></Icon>
             下载全部
 
             <Icon type="arrow-down-b"></Icon>
-        </Button>
-        <DropdownMenu slot="list">
+          </Button>
+          <DropdownMenu slot="list">
             <DropdownItem name="pdf">PDF格式</DropdownItem>
             <DropdownItem name="docx">DOCX格式</DropdownItem>
-        </DropdownMenu>
-    </Dropdown>
+          </DropdownMenu>
+        </Dropdown>
       </div>
     </div>
     <div class="page-info">相关结果共 {{ dailysData.length }} 条。</div>
@@ -90,6 +88,7 @@
 import config from '../config'
 import utils from '../utils'
 import axios from 'axios'
+import moment from 'moment'
 
 const prefix = config.service.apiUrl
 
@@ -99,51 +98,48 @@ export default {
       downloading: false,
       loading: false,
       existDailys: [],
-      gardenList: [
-        '雅苑', '和苑', '馨苑'
-      ],
-      sexList: [
-        '男生', '女生'
-      ],
+      gardenList: ['雅苑', '和苑', '馨苑'],
+      sexList: ['男生', '女生'],
       gradeList: [],
       weekList: [],
-      columns2: [{
-        type: 'index',
-        title: '序号',
-        width: 80
-      }, {
-        title: '日期',
-        key: 'date'
-      }, {
-        title: '班级',
-        key: 'detail',
-        render: (h, params) => {
-          return h('div', [
-            this.classDetail(h, params.row)
-          ])
+      columns2: [
+        {
+          type: 'index',
+          title: '序号',
+          width: 80
+        },
+        {
+          title: '日期',
+          key: 'date'
+        },
+        {
+          title: '班级',
+          key: 'detail',
+          render: (h, params) => {
+            return h('div', [this.classDetail(h, params.row)])
+          }
+        },
+        {
+          title: '房间',
+          key: 'detail2',
+          render: (h, params) => {
+            return h('div', [this.classDetail2(h, params.row)])
+          }
+        },
+        {
+          title: '问题描述',
+          key: 'desc',
+          width: 200
+        },
+        {
+          title: '操作',
+          key: 'action',
+          width: 80,
+          render: (h, params) => {
+            return h('div', [this.delConfirmRender(h, params.row)])
+          }
         }
-      }, {
-        title: '房间',
-        key: 'detail2',
-        render: (h, params) => {
-          return h('div', [
-            this.classDetail2(h, params.row)
-          ])
-        }
-      }, {
-        title: '问题描述',
-        key: 'desc',
-        width: 200
-      }, {
-        title: '操作',
-        key: 'action',
-        width: 80,
-        render: (h, params) => {
-          return h('div', [
-            this.delConfirmRender(h, params.row)
-          ])
-        }
-      }],
+      ],
       dailysData: [],
       showWeek: 0,
       showGarden: '雅苑',
@@ -160,16 +156,16 @@ export default {
     },
     fetch() {
       this.$Loading.start()
-      this.fetchGradeDailys()
-        .then(() => {
-          this.fetchDailysData()
-        })
+      this.fetchGradeDailys().then(() => {
+        this.fetchDailysData()
+      })
     },
     fetchGradeDailys() {
       return new Promise((resolve, reject) => {
         const url = prefix + '/dailies/grades'
-        axios.get(url)
-          .then((res) => {
+        axios
+          .get(url)
+          .then(res => {
             this.gradeList = res.data.slice().sort(utils.sortGradeDailys)
             this.showGrade = this.gradeList[0].grade
             this.changeShowWeek()
@@ -184,76 +180,114 @@ export default {
     classDetail(h, row) {
       let c = h('div', `${row.grade}届-${row.class}班`)
       let t = h('div', `班主任：${row.teacher}`)
-      let classStr = h('div',
-        [c, t])
+      let classStr = h('div', [c, t])
       return classStr
     },
     classDetail2(h, row) {
       let r = h('div', `${row.garden}-${row.roomnumber}`)
       let l = h('div', `舍长：${row.leader}`)
-      let roomStr = h('div',
-        [r, l])
+      let roomStr = h('div', [r, l])
       return roomStr
     },
     delConfirmRender(h, row) {
-      let btn = h('Button', {
-        props: {
-          type: 'text',
-          size: 'small'
-        },
-        style: {
-          fontSize: '14px'
-        }
-      }, '删除')
-      let okBtn = h('Button', {
-        props: {
-          type: 'warning',
-          size: 'small'
-        },
-        style: {
-          marginTop: '10px'
-        },
-        on: {
-          click: () => {
-            this.delDaily(row)
+      let btn = h(
+        'Button',
+        {
+          props: {
+            type: 'text',
+            size: 'small'
+          },
+          style: {
+            fontSize: '14px'
           }
-        }
-      }, '删除')
-      let btnLine = h('div', {
-        class: 'layout horizontal'
-      }, [h('div', {
-        class: 'flex'
-      }, ''), okBtn])
+        },
+        '删除'
+      )
+      let okBtn = h(
+        'Button',
+        {
+          props: {
+            type: 'warning',
+            size: 'small'
+          },
+          style: {
+            marginTop: '10px'
+          },
+          on: {
+            click: () => {
+              this.delDaily(row)
+            }
+          }
+        },
+        '删除'
+      )
+      let btnLine = h(
+        'div',
+        {
+          class: 'layout horizontal'
+        },
+        [
+          h(
+            'div',
+            {
+              class: 'flex'
+            },
+            ''
+          ),
+          okBtn
+        ]
+      )
       let titleStr = row.garden + '-' + row.roomnumber + ' 宿舍 ' + row.date
-      let title = h('div', {
-        slot: 'title'
-      }, '确认删除？')
-      let tipStr = h('div', {
-        style: {
-          fontSize: '14px'
-        }
-      }, titleStr + '的检查记录将会被删除。')
-      let warningStr = h('div', {
-        style: {
-          color: '#ff0000',
-          fontSize: '14px'
-        }
-      }, '警告：此操作不可恢复！')
-      let content = h('div', {
-        slot: 'content'
-      }, [tipStr, warningStr, btnLine])
+      let title = h(
+        'div',
+        {
+          slot: 'title'
+        },
+        '确认删除？'
+      )
+      let tipStr = h(
+        'div',
+        {
+          style: {
+            fontSize: '14px'
+          }
+        },
+        titleStr + '的检查记录将会被删除。'
+      )
+      let warningStr = h(
+        'div',
+        {
+          style: {
+            color: '#ff0000',
+            fontSize: '14px'
+          }
+        },
+        '警告：此操作不可恢复！'
+      )
+      let content = h(
+        'div',
+        {
+          slot: 'content'
+        },
+        [tipStr, warningStr, btnLine]
+      )
 
-      let pop = h('Poptip', {
-        props: {
-          placement: 'top-end'
-        }
-      }, [btn, title, content])
+      let pop = h(
+        'Poptip',
+        {
+          props: {
+            placement: 'top-end'
+          }
+        },
+        [btn, title, content]
+      )
       return pop
     },
     delDaily(row) {
       const url = prefix + '/dailies/' + row._id
       const that = this
-      axios.delete(url)
+      axios
+        .delete(url)
         .then(function(res) {
           that.fetchDailysData()
           that.$Message.info('删除一条内务检查记录。')
@@ -267,30 +301,44 @@ export default {
       this.fetchDailysData()
     },
     fetchDailysData() {
-      const url = prefix + '/dailies?week=' + this.showWeek +
-        '&garden=' + this.showGarden +
-        '&grade=' + this.showGrade + '&sex=' + this.showSex
+      const url =
+        prefix +
+        '/dailies?week=' +
+        this.showWeek +
+        '&garden=' +
+        this.showGarden +
+        '&grade=' +
+        this.showGrade +
+        '&sex=' +
+        this.showSex
 
-      const that = this
-      axios.get(url)
-        .then(function(res) {
+      axios
+        .get(url)
+        .then(res => {
           let dailys = res.data.slice()
-          dailys.forEach(function(a, b, c) {
-            c[b].date = a.date.substring(0, 10)
+          dailys.forEach((a, b, c) => {
+            c[b].date = moment(a.date).format('YYYY-MM-DD')
           })
-          that.dailysData = dailys
-          that.$Loading.finish()
+          this.dailysData = dailys
+          this.$Loading.finish()
         })
         .catch(function(err) {
           console.log(err)
         })
     },
     exportAll(format) {
-      const url = prefix + '/documents?type=all&week=' + this.showWeek +
-        '&grade=' + this.showGrade + '&format=' + format
+      const url =
+        prefix +
+        '/documents?type=all&week=' +
+        this.showWeek +
+        '&grade=' +
+        this.showGrade +
+        '&format=' +
+        format
       this.downloading = true
-      axios.get(url)
-        .then((res) => {
+      axios
+        .get(url)
+        .then(res => {
           let fl = res.data.file_path
           fl.forEach((v, i) => {
             i += 1
@@ -305,15 +353,21 @@ export default {
         })
     },
     exportReport() {
-      const url = prefix + '/documents?format=pdf&type=report&week=' +
-        this.showWeek + '&grade=' + this.showGrade + '&sex=' + this.showSex
+      const url =
+        prefix +
+        '/documents?format=pdf&type=report&week=' +
+        this.showWeek +
+        '&grade=' +
+        this.showGrade +
+        '&sex=' +
+        this.showSex
       this.downloading = true
-      axios.get(url)
-        .then((res) => {
+      axios
+        .get(url)
+        .then(res => {
           let fl = res.data.file_path
           let arr = fl.split('/')
-          let link = config.service.host + '/archive/' +
-            arr[arr.length - 1]
+          let link = config.service.host + '/archive/' + arr[arr.length - 1]
           this.downloading = false
           window.open(link, 'newwindow')
         })
@@ -322,11 +376,16 @@ export default {
         })
     },
     exportNotice() {
-      const url = prefix + '/documents?format=pdf&type=notice&week=' + this.showWeek +
-        '&grade=' + this.showGrade
+      const url =
+        prefix +
+        '/documents?format=pdf&type=notice&week=' +
+        this.showWeek +
+        '&grade=' +
+        this.showGrade
       this.downloading = true
-      axios.get(url)
-        .then((res) => {
+      axios
+        .get(url)
+        .then(res => {
           let fl = res.data.file_path
           let arr = fl.split('/')
           let link = config.service.host + '/archive/' + arr[arr.length - 1]
@@ -360,8 +419,8 @@ export default {
     }
   },
   watch: {
-    'showGarden': 'changeShowSex',
-    'showGrade': 'changeShowWeek'
+    showGarden: 'changeShowSex',
+    showGrade: 'changeShowWeek'
   }
 }
 </script>

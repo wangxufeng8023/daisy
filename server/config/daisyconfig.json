@@ -3,8 +3,8 @@
     "dburl": "mongodb://localhost:27017",
     "dbname": "sanitation",
     "daterange": {
-        "from": "2017-09-01",
-        "to": "2018-03-01"
+        "from": "2018-03-04",
+        "to": "2018-06-09"
     },
     "schoolterm": "高三下学期"
 }
