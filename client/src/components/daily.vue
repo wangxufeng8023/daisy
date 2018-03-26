@@ -17,7 +17,8 @@
     <h2 class="page-title">内务检查</h2>
     <p class="page-info">*本页数据的日期范围为 {{ dateRange.from }} 至 {{ dateRange.to}}。</p>
     <div class="section">
-      <Tabs type="card" :animated="false">
+      <!-- <Tabs type="card" :animated="false"> -->
+      <Tabs type="card">
         <!-- BUG: animated="true" 在 safari 浏览器和 iOS 系统上下拉列表位置不对。取消动画正常。 -->
         <Tab-pane label="概览" name="name1">
           <d-overview v-on:loading="showLoading"></d-overview>

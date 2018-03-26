@@ -57,6 +57,7 @@ class UtilsController {
    * 测试数据库连接
    */
   static async testConnection(ctx: Koa.Context, next: Function) {
+    ctx.body = 'ok'
     try {
       let client: MongoClient = await MongoClient.connect(config.dburl, {
         family: 4

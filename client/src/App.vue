@@ -10,7 +10,7 @@
         <div>雏菊 正在载入中，请稍候... </div>
       </Spin>
     </div>
-    <div v-else="loading">
+    <div v-else>
       <div class="hline"></div>
       <!-- 连上数据库后，显示 frame。 -->
       <router-view></router-view>
@@ -46,14 +46,14 @@ export default {
     },
     testConnect() {
       const url = prefix + '/connect'
-      let that = this
-      axios.get(url)
-        .then(function(res) {
-          that.loading = false
+      axios
+        .get(url)
+        .then(res => {
+          this.loading = false
         })
-        .catch(function(err) {
+        .catch(err => {
           console.log(err)
-          that.loading = true
+          this.loading = true
         })
     }
   }
@@ -63,5 +63,4 @@ export default {
 <style lang="scss">
 @import './assets/layout.css';
 @import './assets/page.scss';
-
 </style>

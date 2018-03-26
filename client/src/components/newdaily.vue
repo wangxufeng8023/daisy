@@ -86,7 +86,7 @@
       </div>
     </div>
     <Modal v-model="newRecordModal" width="1000" :styles="{top: '20px'}">
-      <h2 slot="header">{{ roomTitle }}</h2>{{this.newRecord}}
+      <h2 slot="header">{{ roomTitle }}</h2>
       <div class="layout horizontal">
         <div>
           <Form :label-width="60" label-position="left">
