@@ -47,6 +47,7 @@ abstract class BaseService {
   update(ctx: Koa.Context) {
     const objId = ctx.params.id
     const obj = ctx.request.body
+    delete obj._id
     return this.repository.update(objId, obj)
   }
   /**

@@ -440,17 +440,24 @@ export default {
       this.reset()
     },
     fetchGrade() {
-      const url = prefix + '/dailies/grades'
+      const url = prefix + '/classes/grades'
       const that = this
 
       axios.get(url)
-        .then(function(res) {
-          that.gradeList = []
-          res.data.forEach(v => {
-            that.gradeList.push(v.grade)
+        .then((res) => {
+          this.gradeList = []
+          res.data[0].grades.forEach(v => {
+            this.gradeList.push(v)
           })
-          that.gradeList.sort(utils.sortNumber)
-          that.showGrade = res.data[0].grade
+          this.gradeList.sort(utils.sortNumber)
+          this.showGrade = this.gradeList[0]
+          console.log(res.data)
+          // that.gradeList = []
+          // res.data.forEach(v => {
+          //   that.gradeList.push(v.grade)
+          // })
+          // that.gradeList.sort(utils.sortNumber)
+          // that.showGrade = res.data[0].grade
           that.fetchData()
         })
         .catch(function(err) {
