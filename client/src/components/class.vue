@@ -441,8 +441,6 @@ export default {
     },
     fetchGrade() {
       const url = prefix + '/classes/grades'
-      const that = this
-
       axios.get(url)
         .then((res) => {
           this.gradeList = []
@@ -451,14 +449,7 @@ export default {
           })
           this.gradeList.sort(utils.sortNumber)
           this.showGrade = this.gradeList[0]
-          console.log(res.data)
-          // that.gradeList = []
-          // res.data.forEach(v => {
-          //   that.gradeList.push(v.grade)
-          // })
-          // that.gradeList.sort(utils.sortNumber)
-          // that.showGrade = res.data[0].grade
-          that.fetchData()
+          this.fetchData()
         })
         .catch(function(err) {
           console.log(err)
