@@ -90,7 +90,7 @@ abstract class Template {
       let absFilePath = path.resolve(filePath)
       let resultFilePath = filePath.split('.')[0] + '.pdf'
       let convertScript = path.resolve(path.join(__dirname, '/convert.vbs'))
-      childProcess.exec(
+      childProcess.exec( 
         convertScript + ' ' + absFilePath,
         async (error, stdout, stderr) => {
           if (error) {

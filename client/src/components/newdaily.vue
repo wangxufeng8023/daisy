@@ -25,6 +25,10 @@
   border: 1px dashed #cdc8eb;
   line-height: 20px;
 }
+.piece-lg {
+  font-size: 16px;
+  padding: 5px;
+}
 
 .piece:hover {
   cursor: pointer;
@@ -109,8 +113,8 @@
               <div class="layout vertical">
                 <div class="layout horizontal">
                   <Input class="flex-1" v-model="newRecord.desc" style="min-width:220px;" type="textarea" :autosize="{minRows: 3, maxRows: 6}" placeholder="请输入..."></Input>
-                  <div class="suggestion flex-1">
-                    <span class="piece" v-if="suggestion.length > 0" v-for="(item, index) in suggestion" :key="index+item" @click="addDesc">{{ item }}</span>
+                  <div class="suggestion flex-1 layout horizontal wrap start">
+                    <span class="piece piece-lg" v-if="suggestion.length > 0" v-for="(item, index) in suggestion" :key="index+item" @click="addDesc">{{ item }}</span>
                   </div>
                 </div>
                 <div class="layout horizontal center">

@@ -215,7 +215,7 @@ export default {
         render: (h, params) => {
           return h('span', {
             style: {
-              fontSize: '16px'
+              fontSize: '32px'
             }
           }, params.row.class)
         }
@@ -361,7 +361,7 @@ export default {
           size: 'small'
         },
         style: {
-          fontSize: '14px'
+          fontSize: '16px'
         }
       }, '删除')
       let okBtn = h('Button', {

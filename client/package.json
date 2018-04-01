@@ -1,6 +1,6 @@
 {
   "name": "daisy-client",
-  "version": "3.0.0",
+  "version": "3.2.0",
   "description": "基于 vue.js 搭建前端单页面。",
   "author": "angela",
   "private": true,
